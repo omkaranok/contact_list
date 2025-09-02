@@ -1,0 +1,66 @@
+<body>
+  {{> main }}
+</body>
+
+<template name="main">
+  {{#if isUserLogged}}
+    {{#if isEditEnabled}}
+       {{> addedit contact=selectedContact}}
+    {{else if isDetailsEnabled}}
+       {{> contactDetails contact=selectedContact}}
+    {{else}}
+       {{> mainContainer}}
+    {{/if}}
+  {{else}}
+    {{> login }}
+  {{/if}}
+</template>
+
+
+<template name="mainContainer">
+  <div class="app">
+    <header class="head">
+      <h1 class="maincon">Contact List</h1>
+      <div class = "user">
+        <button class = "logout">Logout</button>
+      </div>
+      <input type="text" name="text" placeholder="Search" class="intext">
+      <button class="conbut">+ Add Contact</button>
+    </header>
+
+    <!-- Contact list section -->
+   
+    <div class = "contact-list">
+        {{# each contacts}}
+        {{> contactItem}}
+      {{/each}}
+    </div>
+  </div>
+</template>
+
+<template name="contactItem">
+  <div class="contact">
+    <span>👤 {{name}} - {{phone}}</span>
+    <div class="contact-list-button">
+        <button class="edit-contact-items">✏️ Edit</button>
+        <button class="delete-contact">🗑️ Delete</button>
+        <button class = "view-details">📄 Details</button>
+    </div>
+  </div>
+</template>
+
+<template name="contactDetails">
+  {{#if contact}}
+    <div class="contact-details">
+      <div class="button-container">
+        <button class="close-details">Back</button>
+      </div>
+      <h3>Contact Details</h3>
+      <p><b>Name:</b> {{contact.name}}</p>
+      <p><b>Phone:</b> {{contact.phone}}</p>
+      <p><b>Company:</b> {{contact.company}}</p>
+      <p><b>Notes:</b> {{contact.notes}}</p>
+    </div>
+  {{/if}}
+</template>
+
