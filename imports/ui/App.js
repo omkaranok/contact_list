@@ -42,6 +42,11 @@ Template.main.helpers({
 
 });
 
+Template.mainContainer.onCreated(function () {
+  this.state = new ReactiveDict();
+  this.state.set('searchQuery', '');
+});
+
 Template.mainContainer.events({
   'click .conbut'() {
     mainState.set('selectedContact', null);
@@ -51,7 +56,11 @@ Template.mainContainer.events({
 
   'click .logout'(){
     Meteor.logout();
-  }
+  },
+
+  'input .intext'(event, instance) {
+    instance.state.set('searchQuery', event.target.value.trim());
+  },
 });
 
 Template.contactItem.events({
@@ -73,7 +82,15 @@ Template.contactItem.events({
 
 Template.mainContainer.helpers({
   contacts() {
-    return ContactCollection.find({},{ sort: {createdAt:-1}});
+    const instance = Template.instance();
+    const search = instance.state.get('searchQuery');
+    if (search) {
+      return ContactCollection.find(
+        { name: { $regex: search, $options: 'i' } }, 
+        { sort: { createdAt: -1 } }
+      );
+    }
+    return ContactCollection.find({}, { sort: { createdAt: -1 } });
   }
 });
 
