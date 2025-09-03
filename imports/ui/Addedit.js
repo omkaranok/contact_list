@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
+import { mainState } from './App.js';
 
 Template.addedit.events({
   'submit .edit'(event, instance) {
@@ -15,11 +16,19 @@ Template.addedit.events({
     };
 
     if (this.contact && this.contact._id) {
-      // Edit existing
-      Meteor.call('contacts.update', this.contact._id, contactData);
+      Meteor.call('contacts.update', this.contact._id, contactData ,(err) =>{
+        if(!err){
+          mainState.set('isEditEnabled',false);
+          mainState.set('isDetailsEnabled',false);
+        }
+      });
     } else {
-      // Add new
-      Meteor.call('contacts.insert', contactData);
+      Meteor.call('contacts.insert', contactData,(err) => {
+        if(!err){
+          mainState.set('isEditEnabled',false);
+          mainState.set('isDetailsEnabled',false);
+        }
+      });
     }
   },
 

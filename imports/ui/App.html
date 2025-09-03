@@ -31,7 +31,7 @@
     <!-- Contact list section -->
    
     <div class = "contact-list">
-        {{# each contacts}}
+      {{# each contacts}}
         {{> contactItem}}
       {{/each}}
     </div>
@@ -39,12 +39,15 @@
 </template>
 
 <template name="contactItem">
-  <div class="contact">
-    <span>👤 {{name}} - {{phone}}</span>
+  <div class="contact-card">
+    <div class = "contact-per">👤  {{name}}</div>
+    <div>{{phone}}</div>
+    <div>{{email}}</div>
+    <div>{{company}}</div>
     <div class="contact-list-button">
-        <button class="edit-contact-items">✏️ Edit</button>
-        <button class="delete-contact">🗑️ Delete</button>
-        <button class = "view-details">📄 Details</button>
+        <button class="edit-contact-items">✏️</button>
+        <button class="delete-contact">🗑️</button>
+        <button class = "view-details">📄</button>
     </div>
   </div>
 </template>
