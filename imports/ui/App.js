@@ -6,6 +6,7 @@ import './Addedit.js';
 import { ContactCollection } from '../api/ContactCollection.js';
 import './Login.js';
 import './Login.html';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 export const mainState = new ReactiveDict();
 
@@ -17,11 +18,6 @@ Template.main.onCreated(function () {
   mainState.set('isEditEnabled', false);
   mainState.set('selectedContact', null);
   mainState.set('isDetailsEnabled', false);
-
-  this.autorun(() => {
-    this.subscribe('contacts');
-  });
-
 });
 
 Template.main.helpers({
@@ -45,6 +41,15 @@ Template.main.helpers({
 Template.mainContainer.onCreated(function () {
   this.state = new ReactiveDict();
   this.state.set('searchQuery', '');
+
+  this.page = new ReactiveVar(1);
+  this.limit = new ReactiveVar(12);
+
+  // this.autorun(() => {
+  //   const page = this.page.get();
+  //   const limit = this.limit.get();
+  //   this.subscribe("contacts",page,limit);
+  // })
 });
 
 Template.mainContainer.events({
@@ -61,6 +66,19 @@ Template.mainContainer.events({
   'input .intext'(event, instance) {
     instance.state.set('searchQuery', event.target.value.trim());
   },
+
+  'click .prev-page'(event, instance) {
+    const current = instance.page.get();
+    if (current > 1) {
+      instance.page.set(current - 1);
+    }
+  },
+
+  'click .next-page'(event, instance) {
+    const current = instance.page.get();
+    instance.page.set(current + 1);
+  }
+
 });
 
 Template.contactItem.events({
@@ -81,16 +99,24 @@ Template.contactItem.events({
 });
 
 Template.mainContainer.helpers({
+  page(){
+    return Template.instance().page.get();
+  },
+
   contacts() {
     const instance = Template.instance();
+    const page = instance.page.get();
+    const limit = instance.limit.get();
+    const skip = (page-1)*limit;
+
     const search = instance.state.get('searchQuery');
     if (search) {
       return ContactCollection.find(
         { name: { $regex: search, $options: 'i' } }, 
-        { sort: { createdAt: -1 } }
+        { sort: { createdAt: -1 },skip,limit }
       );
     }
-    return ContactCollection.find({}, { sort: { createdAt: -1 } });
+    return ContactCollection.find({}, { sort: { createdAt: -1 },skip,limit });
   }
 });
 

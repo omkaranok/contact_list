@@ -2,9 +2,14 @@ import { Meteor } from 'meteor/meteor';
 import { ContactCollection } from '../imports/api/ContactCollection';
 import '/imports/api/ContactMethods.js';
 
-Meteor.publish('contacts', function () {
-  return ContactCollection.find();
-});
+// Meteor.publish('contacts', function (page,limit) {
+//   const skip = (page - 1)* limit;
+//   return ContactCollection.find({},{
+//     sort:{createdAt:-1},
+//     skip,
+//     limit
+//   });
+// });
 
 Meteor.startup(async () => {
   const count = await ContactCollection.find().countAsync();

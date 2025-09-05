@@ -28,8 +28,12 @@
       <button class="conbut">+ Add Contact</button>
     </header>
 
-    <!-- Contact list section -->
-   
+    <div class ="pagination">
+      <button class = "prev-page">←</button>
+      <span>Page {{page}}</span>
+      <button class = "next-page">→</button>
+    </div>
+
     <div class = "contact-list">
       {{# each contacts}}
         {{> contactItem}}

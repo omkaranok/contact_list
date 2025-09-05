@@ -243,3 +243,26 @@ body {
   font-weight: 200;
 }
 
+.pagination {
+  display:flex;
+  justify-content: flex-end;
+  gap: 10px;
+  align-items: center;
+  margin:5px;
+}
+
+
+.pagination > button {
+  background: none;
+  border: 1px solid black;
+  border-radius: 50%;
+  font-size: 20px;   
+  cursor: pointer;
+  color: #333;       
+  padding: 8px 12px;
+  transition: color 0.2s;
+}
+
+.pagination > button:hover {
+  color: #007bff;   
+}
